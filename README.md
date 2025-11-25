@@ -1,20 +1,26 @@
-<div align="center">
-<img width="1200" height="475" alt="GHBanner" src="https://github.com/user-attachments/assets/0aa67016-6eaf-458a-adb2-6e31a0763ed6" />
-</div>
+# NeoCard: AI-Powered Digital Business Card
 
-# Run and deploy your AI Studio app
+A modern, mobile-first digital business card application built with React, Tailwind CSS, and Google Gemini API.
 
-This contains everything you need to run your app locally.
+## Features
 
-View your app in AI Studio: https://ai.studio/apps/drive/1ueQnd8Aoi-lACko8Lai69Z2po35k0igv
+- 🎨 **Dynamic Themes**: Auto-switching themes based on holidays (Christmas, Halloween, Valentine's, etc.) and user preferences (Dark Mode).
+- 🤖 **AI Avatar**: Interactive chat powered by Google Gemini that answers questions about your professional background.
+- 📇 **Smart Sharing**: Generate vCards (.vcf) and QR codes for instant contact saving.
+- 📱 **PWA Ready**: Installable on mobile devices with offline support.
+- 💼 **Professional UI**: Clean, responsive design optimized for mobile networking.
 
-## Run Locally
+## Setup
 
-**Prerequisites:**  Node.js
+1. Clone the repository.
+2. Install dependencies: `npm install`
+3. Create a `.env` file and add your Gemini API key: `API_KEY=your_key_here`
+4. Run locally: `npm start`
 
+## Customization
 
-1. Install dependencies:
-   `npm install`
-2. Set the `GEMINI_API_KEY` in [.env.local](.env.local) to your Gemini API key
-3. Run the app:
-   `npm run dev`
+Edit `constants.ts` to update your profile information, social links, and theme configurations.
+
+## License
+
+MIT
