@@ -1,60 +1,45 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="https://lucide.dev/icon/id-card.svg" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    
-    <!-- Primary Meta Tags -->
-    <title>NeoCard - Digital Business Card</title>
-    <meta name="title" content="NeoCard - Digital Business Card">
-    <meta name="description" content="A next-generation digital business card featuring dynamic seasonal themes, AI-powered interactive avatar, and instant contact sharing.">
 
-    <!-- Open Graph / Facebook -->
-    <meta property="og:type" content="website">
-    <meta property="og:url" content="https://coqui.cloud/">
-    <meta property="og:title" content="NeoCard - Digital Business Card">
-    <meta property="og:description" content="A next-generation digital business card featuring dynamic seasonal themes, AI-powered interactive avatar, and instant contact sharing.">
-    <meta property="og:image" content="https://images.unsplash.com/photo-1557804506-669a67965ba0?auto=format&fit=crop&q=80&w=1200&h=630">
+<head>
+  <meta charset="UTF-8" />
+  <link rel="icon" type="image/svg+xml" href="https://lucide.dev/icon/id-card.svg" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-    <!-- Twitter -->
-    <meta property="twitter:card" content="summary_large_image">
-    <meta property="twitter:url" content="https://coqui.cloud/">
-    <meta property="twitter:title" content="NeoCard - Digital Business Card">
-    <meta property="twitter:description" content="A next-generation digital business card featuring dynamic seasonal themes, AI-powered interactive avatar, and instant contact sharing.">
-    <meta property="twitter:image" content="https://images.unsplash.com/photo-1557804506-669a67965ba0?auto=format&fit=crop&q=80&w=1200&h=630">
+  <!-- Primary Meta Tags -->
+  <title>NeoCard - Digital Business Card</title>
+  <meta name="title" content="NeoCard - Digital Business Card">
+  <meta name="description"
+    content="A next-generation digital business card featuring dynamic seasonal themes, AI-powered interactive avatar, and instant contact sharing.">
 
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <style>
-      body {
-        font-family: 'Inter', sans-serif;
-      }
-      /* Custom scrollbar for chat */
-      .scrollbar-hide::-webkit-scrollbar {
-          display: none;
-      }
-      .scrollbar-hide {
-          -ms-overflow-style: none;
-          scrollbar-width: none;
-      }
-    </style>
-  <script type="importmap">
-{
-  "imports": {
-    "react": "https://esm.sh/react@18.3.1",
-    "react/": "https://esm.sh/react@18.3.1/",
-    "react-dom/client": "https://esm.sh/react-dom@18.3.1/client",
-    "react-dom": "https://esm.sh/react-dom@18.3.1",
-    "@google/genai": "https://esm.sh/@google/genai",
-    "lucide-react": "https://esm.sh/lucide-react@0.344.0",
-    "qrcode.react": "https://esm.sh/qrcode.react@3.1.0",
-    "react-dom/": "https://aistudiocdn.com/react-dom@^19.2.0/"
-  }
-}
-</script>
+  <!-- Open Graph / Facebook -->
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://coqui.cloud/">
+  <meta property="og:title" content="NeoCard - Digital Business Card">
+  <meta property="og:description"
+    content="A next-generation digital business card featuring dynamic seasonal themes, AI-powered interactive avatar, and instant contact sharing.">
+  <meta property="og:image"
+    content="https://images.unsplash.com/photo-1557804506-669a67965ba0?auto=format&fit=crop&q=80&w=1200&h=630">
+
+  <!-- Twitter -->
+  <meta property="twitter:card" content="summary_large_image">
+  <meta property="twitter:url" content="https://coqui.cloud/">
+  <meta property="twitter:title" content="NeoCard - Digital Business Card">
+  <meta property="twitter:description"
+    content="A next-generation digital business card featuring dynamic seasonal themes, AI-powered interactive avatar, and instant contact sharing.">
+  <meta property="twitter:image"
+    content="https://images.unsplash.com/photo-1557804506-669a67965ba0?auto=format&fit=crop&q=80&w=1200&h=630">
+
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="manifest" href="/manifest.webmanifest">
+  <meta name="theme-color" content="#2563eb">
+  <link rel="apple-touch-icon" href="/pwa-192x192.png">
 </head>
-  <body class="bg-gray-100 text-slate-900 antialiased">
-    <div id="root"></div>
-  </body>
+
+<body class="bg-gray-100 text-slate-900 antialiased">
+  <div id="root"></div>
+  <script type="module" src="/src/index.tsx"></script>
+</body>
+
 </html>

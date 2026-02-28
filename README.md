@@ -1,31 +1,142 @@
-# NeoCard: AI-Powered Digital Business Card
+# 📇 NeoCard: The AI-Powered Digital Business Card
 
-A modern, mobile-first digital business card application built with React, Tailwind CSS, and Google Gemini API.
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![React](https://img.shields.io/badge/React-20232A?style=for-the-badge&logo=react&logoColor=61DAFB)](https://reactjs.org/)
+[![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-38B2AC?style=for-the-badge&logo=tailwind-css&logoColor=white)](https://tailwindcss.com/)
+[![Gemini AI](https://img.shields.io/badge/Gemini_AI-4285F4?style=for-the-badge&logo=google-gemini&logoColor=white)](https://deepmind.google/technologies/gemini/)
 
-## Features
+**NeoCard** is a modern, mobile-first digital business card application designed for the networking elite. It combines sleek design with a Gemini-powered AI avatar to create an interactive experience that goes beyond static links.
 
-- 🎨 **Dynamic Themes**: Auto-switching themes based on holidays (Christmas, Halloween, Valentine's, etc.) and user preferences (Dark Mode).
-- 🤖 **AI Avatar**: Interactive chat powered by Google Gemini that answers questions about your professional background.
-- 📇 **Smart Sharing**: Generate vCards (.vcf) and QR codes for instant contact saving.
-- 📱 **PWA Ready**: Installable on mobile devices with offline support.
-- 💼 **Professional UI**: Clean, responsive design optimized for mobile networking.
+---
 
-<img width="933" height="1158" alt="image" src="https://github.com/user-attachments/assets/56819896-63a9-4938-97cb-dfd8c235d77c" />
-<img width="231" height="348" alt="image" src="https://github.com/user-attachments/assets/36fa0a6b-cc5d-40bf-a232-62b275c58108" />
-<img width="483" height="645" alt="image" src="https://github.com/user-attachments/assets/2d63fa12-4062-4689-9cab-2b010c2d06a9" />
-<img width="403" height="470" alt="image" src="https://github.com/user-attachments/assets/2a2bcafe-4af3-4d87-a4f7-ee05612c207e" />
+## ✨ Key Features
 
-## Setup
+- **🤖 AI Avatar Assistant**: An interactive chat powered by Google Gemini that answers questions about your professional background, expertise, and availability in real-time.
+- **🎨 Dynamic Seasonal Themes**: Intelligent theme engine that auto-switches based on holidays (Christmas, Halloween, Pride, etc.) or allows manual selection (Midnight Pro, Professional Light).
+- **📇 Smart vCard Generation**: One-tap "Save Contact" button that generates a downloadable `.vcf` file for instant phonebook integration.
+- **📱 PWA Ready**: Installable as a progressive web app for offline access and a native-like experience on iOS and Android.
+- **📊 Lead Capture**: Built-in simple CRM integration point for booking meetings and collecting contact info.
+- **🔗 Social Hub**: Centralized, beautifully styled icons for all your professional social identities.
 
-1. Clone the repository.
-2. Install dependencies: `npm install`
-3. Create a `.env` file and add your Gemini API key: `API_KEY=your_key_here`
-4. Run locally: `npm start`
+## 🚀 Getting Started
 
-## Customization
+### Prerequisites
 
-Edit `constants.ts` to update your profile information, social links, and theme configurations.
+- [Node.js](https://nodejs.org/) (v18 or higher)
+- [npm](https://www.npmjs.com/) or [yarn](https://yarnpkg.com/)
+- A [Google Gemini API Key](https://aistudio.google.com/app/apikey)
 
-## License
+### Installation
 
-MIT
+1. **Clone the Repo**
+
+   ```bash
+   git clone https://github.com/RamonRiosJr/NeoCard.git
+   cd NeoCard
+   ```
+
+2. **Install Dependencies**
+
+   ```bash
+   npm install
+   ```
+
+3. **Configure Environment**
+
+   Create a `.env` file in the root directory (refer to `.env.example`):
+
+   ```env
+   GEMINI_API_KEY=your_gemini_api_key_here
+   ```
+
+4. **Run Development Server**
+
+   ```bash
+   npm run dev
+   ```
+
+## 🛠️ Customization
+
+Most of the application's content and appearance can be customized in a single file: `src/constants.ts`.
+
+```typescript
+// src/constants.ts
+export const EMPLOYEE_DATA = {
+  name: "Ramon Rios Jr",
+  role: "Senior Solutions Architect",
+  // ... other details
+};
+```
+
+## 🏗️ Tech Stack
+
+- **Frontend**: React 18
+- **Styling**: Tailwind CSS
+- **Icons**: Lucide React
+- **AI**: Google Generative AI (@google/genai)
+- **Vite**: Ultra-fast build tool and dev server
+- **QR**: qrcode.react
+
+## 📂 Project Structure
+
+A high-level overview of the repository's organization:
+
+```text
+NeoCard/
+├── .github/workflows/    # CI/CD pipelines
+├── public/               # Static assets
+├── src/
+│   ├── components/       # UI components (AvatarChat, LeadForm, etc.)
+│   ├── services/         # API integrations (Google Gemini)
+│   ├── utils/           # Helper functions (vCard generation, theme logic)
+│   ├── App.tsx          # Main application layout
+│   ├── constants.ts     # Configuration for user data and themes
+│   ├── types.ts         # TypeScript interfaces
+│   └── index.tsx        # Application entry point
+├── .env.example          # Environment variable template
+├── index.html            # Main HTML document
+└── vite.config.ts        # Vite configuration
+```
+
+### 🔍 Key Implementation Details
+
+- **Dynamic Themes**: The logic in `src/utils/cardUtils.ts` detects seasonal holidays and system dark mode to apply styling tokens defined in `src/constants.ts`.
+- **AI Virtual Assistant**: Powered by the `@google/genai` SDK. The logic resides in `src/services/geminiService.ts`, utilizing a system prompt that injects your profile data for context-aware responses.
+
+## 🌿 Repository Standards
+
+We maintain high repo standards to ensure stability and ease of collaboration.
+
+### Branching Strategy
+
+We use **GitHub Flow**. For all technical details on how to contribute, please refer to [CONTRIBUTING.md](CONTRIBUTING.md).
+
+- `main`: Production-ready code.
+- `feature/*`: New features and UI updates.
+- `fix/*`: Bug fixes.
+
+### CI/CD
+
+Automated workflows run on every PR to `main`:
+
+- **Build**: Ensures the project compiles and builds correctly.
+- **Typecheck**: Verifies TypeScript strictness.
+- **Lint**: Ensures consistent code style.
+
+## 📈 Optimization & Sanitization
+
+This repository has been sanitized for public use:
+
+- ✅ Removed hardcoded personal identifiers from logic.
+- ✅ Environment-based configuration for API keys.
+- ✅ Optimized TypeScript interfaces for strict type checking.
+- ✅ Organized project structure into standard `src/` directory.
+- ✅ Streamlined Vite configuration for faster HMR.
+
+## 📄 License
+
+Distributed under the MIT License. See `LICENSE` for more information.
+
+---
+
+Built with ❤️ by [Coqui Cloud](https://coqui.cloud)

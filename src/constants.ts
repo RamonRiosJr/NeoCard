@@ -1,19 +1,19 @@
 import { EmployeeProfile, ThemeConfig, ThemeType } from './types';
 
 export const EMPLOYEE_DATA: EmployeeProfile = {
-  name: "Jordan Lee",
-  role: "Senior Product Designer",
-  company: "Creative Studio",
-  bio: "Crafting digital experiences that merge functionality with aesthetics. Specialized in design systems, accessible UI, and user-centric interfaces.",
-  avatarUrl: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&q=80&w=400", 
-  location: "San Francisco, CA",
-  email: "jordan@example.com",
+  name: "Ramon Rios Jr",
+  role: "Senior Solutions Architect",
+  company: "Coqui Cloud",
+  bio: "Architecting scalable cloud solutions and clinical operating systems. Specialized in Odoo ERP, Python, and modern web architectures.",
+  avatarUrl: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?auto=format&fit=crop&q=80&w=400",
+  location: "Orlando, FL",
+  email: "ramon@coqui.cloud",
   phone: "+1 (555) 000-0000",
-  website: "www.example.com",
+  website: "coqui.cloud",
   highlights: [
-    "Product Strategy",
-    "UI/UX Design",
-    "Frontend Development"
+    "Odoo Implementation",
+    "Cloud Infrastructure",
+    "Product Strategy"
   ],
   socials: [
     { platform: 'linkedin', url: 'https://linkedin.com', label: 'LinkedIn' },

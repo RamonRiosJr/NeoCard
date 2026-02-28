@@ -1,15 +1,15 @@
 import React, { useState, useEffect } from 'react';
-import { 
-  Download, 
-  Share2, 
-  Calendar, 
-  Mail, 
-  Phone, 
-  MapPin, 
-  Globe, 
-  Linkedin, 
-  Github, 
-  Twitter, 
+import {
+  Download,
+  Share2,
+  Calendar,
+  Mail,
+  Phone,
+  MapPin,
+  Globe,
+  Linkedin,
+  Github,
+  Twitter,
   Youtube,
   QrCode,
   Sparkles,
@@ -21,76 +21,10 @@ import { QRCodeSVG } from 'qrcode.react';
 import { EMPLOYEE_DATA, THEMES } from './constants';
 import { generateVCard, getSeasonalTheme } from './utils/cardUtils';
 import { AvatarChat } from './components/AvatarChat';
-import { ThemeType, ThemeConfig } from './types';
-
-// Simple Lead Form Component
-const LeadFormModal = ({ isOpen, onClose, theme }: { isOpen: boolean, onClose: () => void, theme: ThemeConfig }) => {
-  if (!isOpen) return null;
-  
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    alert("In a real app, this would send data to your CRM!");
-    onClose();
-  };
-
-  return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm animate-in fade-in duration-200">
-      <div className={`w-full max-w-md p-6 rounded-2xl shadow-xl ${theme.colors.cardBg} ${theme.colors.text}`}>
-        <h3 className="text-xl font-bold mb-2">Let's Connect</h3>
-        <p className={`text-sm mb-4 ${theme.colors.textSecondary}`}>Share your info and I'll get back to you.</p>
-        <form onSubmit={handleSubmit} className="space-y-3">
-          <input required type="text" placeholder="Name" className={`w-full p-3 rounded-lg border bg-transparent outline-none focus:ring-2 ${theme.colors.border}`} />
-          <input required type="email" placeholder="Email" className={`w-full p-3 rounded-lg border bg-transparent outline-none focus:ring-2 ${theme.colors.border}`} />
-          <textarea placeholder="Message" className={`w-full p-3 rounded-lg border bg-transparent outline-none focus:ring-2 ${theme.colors.border}`} rows={3}></textarea>
-          <div className="flex gap-2 mt-4">
-            <button type="button" onClick={onClose} className="flex-1 py-3 rounded-lg border font-medium hover:bg-gray-50 transition-colors text-gray-600 border-gray-200">Cancel</button>
-            <button type="submit" className={`flex-1 py-3 rounded-lg font-medium shadow-lg hover:opacity-90 transition-opacity ${theme.colors.accent} text-white`}>Send</button>
-          </div>
-        </form>
-      </div>
-    </div>
-  );
-};
-
-// QR Code Modal
-const QRModal = ({ isOpen, onClose, theme }: { isOpen: boolean, onClose: () => void, theme: ThemeConfig }) => {
-  if (!isOpen) return null;
-  return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm" onClick={onClose}>
-      <div className={`p-8 rounded-2xl shadow-2xl flex flex-col items-center gap-4 ${theme.colors.cardBg}`} onClick={e => e.stopPropagation()}>
-        <div className="bg-white p-4 rounded-xl">
-          <QRCodeSVG value={window.location.href} size={200} />
-        </div>
-        <div className={`text-center ${theme.colors.text}`}>
-          <p className="font-bold text-lg">Scan to Save</p>
-          <p className={`text-sm ${theme.colors.textSecondary}`}>Point your camera at the QR code</p>
-        </div>
-        <button onClick={onClose} className={`mt-2 px-6 py-2 rounded-full border ${theme.colors.border} ${theme.colors.text}`}>Close</button>
-      </div>
-    </div>
-  );
-};
-
-const SocialIcon = ({ type, url, theme }: { type: string, url: string, theme: ThemeConfig }) => {
-  const iconProps = { size: 20, className: `transition-transform hover:scale-110` };
-  let Icon = Globe;
-  if (type === 'linkedin') Icon = Linkedin;
-  if (type === 'github') Icon = Github;
-  if (type === 'twitter') Icon = Twitter;
-  if (type === 'youtube') Icon = Youtube;
-  if (type === 'instagram') Icon = Share2;
-
-  return (
-    <a 
-      href={url} 
-      target="_blank" 
-      rel="noopener noreferrer"
-      className={`p-3 rounded-full border shadow-sm transition-all hover:shadow-md ${theme.colors.cardBg} ${theme.colors.text} ${theme.colors.border}`}
-    >
-      <Icon {...iconProps} />
-    </a>
-  );
-};
+import { LeadFormModal } from './components/LeadFormModal';
+import { QRModal } from './components/QRModal';
+import { SocialIcon } from './components/SocialIcon';
+import { ThemeType } from './types';
 
 export default function App() {
   const [currentThemeId, setCurrentThemeId] = useState<ThemeType>('light');
@@ -99,12 +33,12 @@ export default function App() {
   const [isLeadFormOpen, setIsLeadFormOpen] = useState(false);
   const [isQROpen, setIsQROpen] = useState(false);
   const [views, setViews] = useState(1243); // Mock view counter
-  
+
   // Initialize theme
   useEffect(() => {
     const seasonal = getSeasonalTheme();
     setCurrentThemeId(seasonal);
-    
+
     // Increment view counter mock
     const timer = setTimeout(() => setViews(prev => prev + 1), 2000);
     return () => clearTimeout(timer);
@@ -117,30 +51,31 @@ export default function App() {
       {/* Background Image Overlay if present */}
       {theme.backgroundImage && (
         <>
-          <div 
+          <div
             className="absolute inset-0 bg-cover bg-center z-0"
             style={{ backgroundImage: `url(${theme.backgroundImage})` }}
           />
-          <div 
+          <div
             className="absolute inset-0 z-0 bg-white"
-            style={{ opacity: theme.overlayOpacity || 0.9 }} 
+            style={{ opacity: theme.overlayOpacity || 0.9 }}
           />
         </>
       )}
 
       {/* Main Container */}
       <div className="w-full max-w-md z-10 pb-20 relative">
-        
+
         {/* Admin/Theme Toggle (Hidden in prod usually) */}
         <div className="absolute top-4 right-4 z-50">
-          <button 
+          <button
             onClick={() => setShowThemeSelector(!showThemeSelector)}
             className="p-2 bg-white/50 backdrop-blur-md rounded-full shadow-sm hover:bg-white/80 transition-colors"
             title="Change Theme"
+            aria-label="Toggle theme selector"
           >
             <Palette size={20} className="text-gray-700" />
           </button>
-          
+
           {showThemeSelector && (
             <div className="absolute right-0 mt-2 w-48 bg-white rounded-xl shadow-xl p-2 animate-in fade-in slide-in-from-top-2 border border-gray-100">
               <div className="text-xs font-semibold text-gray-400 mb-2 px-2 uppercase tracking-wider">Select Theme</div>
@@ -162,14 +97,14 @@ export default function App() {
         <div className="pt-12 px-6 pb-6 text-center">
           <div className="relative inline-block mb-4 group">
             <div className={`absolute -inset-1 rounded-full blur opacity-40 group-hover:opacity-75 transition duration-500 ${theme.colors.accent}`}></div>
-            <img 
-              src={EMPLOYEE_DATA.avatarUrl} 
+            <img
+              src={EMPLOYEE_DATA.avatarUrl}
               alt={EMPLOYEE_DATA.name}
               className="relative w-32 h-32 rounded-full object-cover border-4 border-white shadow-xl mx-auto"
             />
             <div className="absolute bottom-1 right-1 bg-green-500 w-5 h-5 rounded-full border-2 border-white shadow-sm" title="Online"></div>
           </div>
-          
+
           <h1 className={`text-3xl font-bold mb-1 tracking-tight ${theme.colors.text}`}>
             {EMPLOYEE_DATA.name}
           </h1>
@@ -184,15 +119,17 @@ export default function App() {
         {/* Action Buttons */}
         <div className="px-6 space-y-3 mb-8">
           <div className="grid grid-cols-2 gap-3">
-            <button 
+            <button
               onClick={generateVCard}
+              aria-label="Save contact to phonebook"
               className={`flex items-center justify-center gap-2 py-3 px-4 rounded-xl font-semibold shadow-lg shadow-blue-500/20 transform active:scale-95 transition-all ${theme.colors.accent} text-white`}
             >
               <Download size={18} />
               Save Contact
             </button>
-            <button 
+            <button
               onClick={() => setIsChatOpen(true)}
+              aria-label="Open AI chat assistant"
               className={`flex items-center justify-center gap-2 py-3 px-4 rounded-xl font-semibold border-2 bg-transparent transform active:scale-95 transition-all
               ${theme.colors.border} ${theme.colors.text} hover:bg-black/5`}
             >
@@ -200,9 +137,10 @@ export default function App() {
               Ask AI Agent
             </button>
           </div>
-          
-          <button 
+
+          <button
             onClick={() => setIsLeadFormOpen(true)}
+            aria-label="Book a meeting form"
             className={`w-full flex items-center justify-center gap-2 py-3 rounded-xl font-semibold border bg-white/50 backdrop-blur-sm hover:bg-white/80 transition-colors ${theme.colors.border} ${theme.colors.text}`}
           >
             <Calendar size={18} />
@@ -231,7 +169,7 @@ export default function App() {
           <div className={`p-5 rounded-2xl shadow-sm border ${theme.colors.cardBg} ${theme.colors.border}`}>
             <h2 className={`text-sm font-bold uppercase tracking-wider mb-3 opacity-70 ${theme.colors.text}`}>Contact Info</h2>
             <div className="space-y-4">
-              <a href={`mailto:${EMPLOYEE_DATA.email}`} className="flex items-center gap-3 group">
+              <a href={`mailto:${EMPLOYEE_DATA.email}`} className="flex items-center gap-3 group" aria-label={`Email ${EMPLOYEE_DATA.name}`}>
                 <div className={`p-2 rounded-lg bg-gray-50 group-hover:bg-blue-50 transition-colors`}>
                   <Mail size={18} className="text-gray-500 group-hover:text-blue-500" />
                 </div>
@@ -240,8 +178,8 @@ export default function App() {
                   <p className={`text-sm font-medium truncate ${theme.colors.text}`}>{EMPLOYEE_DATA.email}</p>
                 </div>
               </a>
-              
-              <a href={`tel:${EMPLOYEE_DATA.phone}`} className="flex items-center gap-3 group">
+
+              <a href={`tel:${EMPLOYEE_DATA.phone}`} className="flex items-center gap-3 group" aria-label={`Call ${EMPLOYEE_DATA.name}`}>
                 <div className={`p-2 rounded-lg bg-gray-50 group-hover:bg-green-50 transition-colors`}>
                   <Phone size={18} className="text-gray-500 group-hover:text-green-500" />
                 </div>
@@ -251,7 +189,7 @@ export default function App() {
                 </div>
               </a>
 
-              <a href={`https://${EMPLOYEE_DATA.website}`} target="_blank" className="flex items-center gap-3 group">
+              <a href={`https://${EMPLOYEE_DATA.website}`} target="_blank" className="flex items-center gap-3 group" aria-label={`Visit website ${EMPLOYEE_DATA.website}`}>
                 <div className={`p-2 rounded-lg bg-gray-50 group-hover:bg-purple-50 transition-colors`}>
                   <Globe size={18} className="text-gray-500 group-hover:text-purple-500" />
                 </div>
@@ -271,9 +209,10 @@ export default function App() {
           </div>
 
           {/* Apple Wallet Mock */}
-          <button 
-             onClick={() => alert("Apple Wallet Pass generated (.pkpass)")}
-             className="w-full bg-black text-white py-3 rounded-xl flex items-center justify-center gap-2 font-medium hover:bg-gray-900 transition-colors shadow-lg"
+          <button
+            onClick={() => alert("Apple Wallet Pass generated (.pkpass)")}
+            aria-label="Add contact to Apple Wallet"
+            className="w-full bg-black text-white py-3 rounded-xl flex items-center justify-center gap-2 font-medium hover:bg-gray-900 transition-colors shadow-lg"
           >
             <Wallet size={18} />
             Add to Apple Wallet
@@ -281,30 +220,32 @@ export default function App() {
 
           {/* Footer / Branding */}
           <div className="text-center pt-8 pb-4">
-             <div className="flex items-center justify-center gap-2 text-xs mb-4 opacity-50">
-               <Eye size={12} />
-               <span>{views.toLocaleString()} views</span>
-             </div>
-             
-             <a 
-               href="https://coqui.cloud/r/NeoCard_Digital_vCard" 
-               target="_blank" 
-               rel="noopener noreferrer"
-               className="inline-flex flex-col items-center gap-2 opacity-60 hover:opacity-100 transition-opacity"
-             >
-               <span className="text-[10px] uppercase tracking-widest font-semibold text-slate-500">Powered by</span>
-               <img 
-                 src="https://coqui.cloud/web/image/website/1/logo/Coqui%20Cloud?unique=2e0b722" 
-                 alt="Coqui Cloud" 
-                 className="h-6 w-auto"
-               />
-             </a>
+            <div className="flex items-center justify-center gap-2 text-xs mb-4 opacity-50">
+              <Eye size={12} />
+              <span>{views.toLocaleString()} views</span>
+            </div>
+
+            <a
+              href="https://coqui.cloud/r/NeoCard_Digital_vCard"
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="Powered by Coqui Cloud"
+              className="inline-flex flex-col items-center gap-2 opacity-60 hover:opacity-100 transition-opacity"
+            >
+              <span className="text-[10px] uppercase tracking-widest font-semibold text-slate-500">Powered by</span>
+              <img
+                src="https://coqui.cloud/web/image/website/1/logo/Coqui%20Cloud?unique=2e0b722"
+                alt="Coqui Cloud Logo"
+                className="h-6 w-auto"
+              />
+            </a>
           </div>
         </div>
 
         {/* Floating Action Button (QR) */}
-        <button 
+        <button
           onClick={() => setIsQROpen(true)}
+          aria-label="Show QR Code"
           className={`fixed bottom-6 right-6 p-4 rounded-full shadow-2xl shadow-black/20 text-white z-40 transition-transform hover:scale-110 active:scale-95 ${theme.colors.accent}`}
         >
           <QrCode size={24} />
@@ -313,20 +254,20 @@ export default function App() {
       </div>
 
       {/* Modals */}
-      <AvatarChat 
-        isOpen={isChatOpen} 
-        onClose={() => setIsChatOpen(false)} 
+      <AvatarChat
+        isOpen={isChatOpen}
+        onClose={() => setIsChatOpen(false)}
         theme={theme}
         employeeName={EMPLOYEE_DATA.name}
       />
-      <LeadFormModal 
-        isOpen={isLeadFormOpen} 
-        onClose={() => setIsLeadFormOpen(false)} 
+      <LeadFormModal
+        isOpen={isLeadFormOpen}
+        onClose={() => setIsLeadFormOpen(false)}
         theme={theme}
       />
-      <QRModal 
-        isOpen={isQROpen} 
-        onClose={() => setIsQROpen(false)} 
+      <QRModal
+        isOpen={isQROpen}
+        onClose={() => setIsQROpen(false)}
         theme={theme}
       />
     </div>

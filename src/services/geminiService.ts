@@ -3,19 +3,21 @@ import { EMPLOYEE_DATA } from "../constants";
 
 let ai: GoogleGenAI | null = null;
 
+const API_KEY = import.meta.env.VITE_GEMINI_API_KEY || '';
+
 const initializeAI = () => {
-  if (!ai && process.env.API_KEY) {
-    ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
+  if (!ai && API_KEY) {
+    ai = new GoogleGenAI(API_KEY);
   }
   return ai;
 };
 
 export const chatWithAvatar = async (userMessage: string, chatHistory: string[]) => {
   const client = initializeAI();
-  
+
   if (!client) {
     console.warn("Gemini API Key not found. Returning mock response.");
-    return "I'm currently in offline mode, but I'd love to connect! Please use the 'Book a Meeting' button to schedule a time with Ramon.";
+    return `I'm currently in offline mode, but I'd love to connect! Please use the 'Book a Meeting' button to schedule a time with ${EMPLOYEE_DATA.name}.`;
   }
 
   const systemPrompt = `
@@ -28,7 +30,7 @@ export const chatWithAvatar = async (userMessage: string, chatHistory: string[])
     Contact: ${EMPLOYEE_DATA.email}
     
     Instructions:
-    1. Answer questions as if you are Ramon. Use "I" statements.
+    1. Answer questions as if you are ${EMPLOYEE_DATA.name}. Use "I" statements.
     2. Be professional, friendly, and concise (under 50 words usually).
     3. If asked about scheduling, suggest using the "Book a Meeting" button.
     4. If asked about technical topics (Odoo, Cloud, Python), show expertise but keep it high-level.

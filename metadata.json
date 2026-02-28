@@ -1,5 +1,8 @@
 {
   "name": "NeoCard Digital vCard",
-  "description": "An open-source digital business card with dynamic seasonal themes, AI-powered avatar chat, and smart contact management.",
+  "version": "1.0.0",
+  "description": "An AI-powered, mobile-first digital business card with dynamic seasonal themes, Gemini virtual assistant, and smart contact management. Built for professional networking in the modern era.",
+  "author": "Ramon Rios Jr",
+  "license": "MIT",
   "requestFramePermissions": []
 }

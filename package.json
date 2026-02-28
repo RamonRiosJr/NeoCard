@@ -1,24 +1,42 @@
 {
   "name": "neocard-digital-vcard",
   "private": true,
-  "version": "0.0.0",
+  "version": "1.0.0",
+  "description": "NeoCard is a modern, AI-powered digital business card with dynamic seasonal themes and a Gemini-powered virtual assistant.",
+  "keywords": [
+    "digital-business-card",
+    "vcard",
+    "ai-avatar",
+    "gemini-api",
+    "react-pwa",
+    "tailwind-css",
+    "seasonal-themes"
+  ],
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "vite build",
-    "preview": "vite preview"
+    "build": "tsc && vite build",
+    "preview": "vite preview",
+    "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
+    "typecheck": "tsc --noEmit"
   },
   "dependencies": {
-    "react": "18.3.1",
-    "react-dom": "^19.2.0",
     "@google/genai": "latest",
     "lucide-react": "0.344.0",
-    "qrcode.react": "3.1.0"
+    "qrcode.react": "3.1.0",
+    "react": "18.3.1",
+    "react-dom": "18.3.1"
   },
   "devDependencies": {
     "@types/node": "^22.14.0",
+    "@typescript-eslint/eslint-plugin": "^8.56.1",
+    "@typescript-eslint/parser": "^8.56.1",
     "@vitejs/plugin-react": "^5.0.0",
+    "eslint": "^9.39.3",
+    "eslint-plugin-react-hooks": "^7.0.1",
+    "eslint-plugin-react-refresh": "^0.5.2",
     "typescript": "~5.8.2",
-    "vite": "^6.2.0"
+    "vite": "^6.2.0",
+    "vite-plugin-pwa": "^1.2.0"
   }
 }
