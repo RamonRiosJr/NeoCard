@@ -72,14 +72,14 @@
 
 ## 🎯 BACKLOG TRACKER
 
-| Ticket ID | Title                                | Severity | Status  |
-| --- | --- | --- | --- |
-| SEC-001 | Migrate Gemini API to Backend Proxy | CRITICAL | IN PROGRESS |
-| ARC-001 | Implement True PWA (manifest + ServiceWorker) | CRITICAL | DONE |
-| UX-001 | Fix AI Chat Modal Overflow Constraints | HIGH | DONE |
-| A11Y-001 | Implement ARIA labels & Modal Focus Traps | HIGH | DONE |
-| ARC-002 | Refactor App.tsx into isolated components | MEDIUM | DONE |
-| PRF-001 | Remove @google/genai from client bundle | MEDIUM | To-Do |
-| ENG-001 | Scaffold Vitest & Core Unit Tests | MEDIUM | To-Do |
-| STY-001 | Migrate inline CSS to index.css | LOW | DONE |
-| UX-002 | Replace Lead Form Alert with Formspree Integration | LOW | To-Do |
+| Ticket ID | Title                                             | Severity | Status      |
+| --------- | ------------------------------------------------- | -------- | ----------- |
+| SEC-001   | Migrate Gemini API to Backend Proxy               | CRITICAL | IN PROGRESS |
+| ARC-001   | Implement True PWA (manifest + ServiceWorker)     | CRITICAL | DONE        |
+| UX-001    | Fix AI Chat Modal Overflow Constraints            | HIGH     | DONE        |
+| A11Y-001  | Implement ARIA labels & Modal Focus Traps         | HIGH     | DONE        |
+| ARC-002   | Refactor App.tsx into isolated components         | MEDIUM   | DONE        |
+| PRF-001   | Remove @google/genai from client bundle           | MEDIUM   | To-Do       |
+| ENG-001   | Scaffold Vitest & Core Unit Tests                 | MEDIUM   | To-Do       |
+| STY-001   | Migrate inline CSS to index.css                   | LOW      | DONE        |
+| UX-002    | Replace Lead Form Alert with Formspree Integration | LOW      | To-Do       |
