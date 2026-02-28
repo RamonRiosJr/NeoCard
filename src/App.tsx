@@ -1,23 +1,17 @@
 import React, { useState, useEffect } from 'react';
 import {
   Download,
-  Share2,
   Calendar,
   Mail,
   Phone,
   MapPin,
   Globe,
-  Linkedin,
-  Github,
-  Twitter,
-  Youtube,
   QrCode,
   Sparkles,
   Palette,
   Eye,
   Wallet
 } from 'lucide-react';
-import { QRCodeSVG } from 'qrcode.react';
 import { EMPLOYEE_DATA, THEMES } from './constants';
 import { generateVCard, getSeasonalTheme } from './utils/cardUtils';
 import { AvatarChat } from './components/AvatarChat';
@@ -27,7 +21,7 @@ import { SocialIcon } from './components/SocialIcon';
 import { ThemeType } from './types';
 
 export default function App() {
-  const [currentThemeId, setCurrentThemeId] = useState<ThemeType>('light');
+  const [currentThemeId, setCurrentThemeId] = useState<ThemeType>(() => getSeasonalTheme() as ThemeType);
   const [showThemeSelector, setShowThemeSelector] = useState(false);
   const [isChatOpen, setIsChatOpen] = useState(false);
   const [isLeadFormOpen, setIsLeadFormOpen] = useState(false);
@@ -35,10 +29,8 @@ export default function App() {
   const [views, setViews] = useState(1243); // Mock view counter
 
   // Initialize theme
+  // Set initial theme directly in state initialization and manage view count timer
   useEffect(() => {
-    const seasonal = getSeasonalTheme();
-    setCurrentThemeId(seasonal);
-
     // Increment view counter mock
     const timer = setTimeout(() => setViews(prev => prev + 1), 2000);
     return () => clearTimeout(timer);
