@@ -1,85 +1,215 @@
-# 📋 NeoCard Audit & Backlog
+# NeoCard SaaS Platform: Engineering Backlog & Architecture Specification
 
-**Auditor:** Senior Arch/DevOps & Security Associate  
-**Date:** 2026-02-27  
-**Scope:** Architecture, Security, Performance, Accessibility, & Code Quality
-
-> **Executive Summary:**  
-> The NeoCard application has a visually appealing UI and an interesting core concept, but under the hood, it is functionally incomplete, structurally flawed, and completely insecure. The README makes several false claims about the app's capabilities (PWA, offline support) that are not implemented. The architecture fundamentally misunderstands how client-side API keys work, exposing the Gemini key to the public.
+**Document Type:** Master Implementation Backlog & Architecture Spec
+**Target State:** Multi-tenant SaaS platform for embeddable, AI-powered digital business cards.
 
 ---
 
-## 🚨 CRITICAL FINDINGS (Must Fix Immediately)
+## 1. Architecture Overview
 
-### 1. SEC-001: Compromised AI API Key (Frontend Exposure)
+The system transitions from a static single-page application to a scalable, serverless micro-services architecture.
 
-* **Description:** The application injects `GEMINI_API_KEY` directly into the Vite build via `vite.config.ts`. Because this is a client-side React application, the API key is fully exposed in the plaintext JavaScript bundle for anyone to scrape and abuse. This will lead to catastrophic billing issues or account suspension.
-* **Fix:** **IMMEDIATE REMEDIATION REQUIRED.** Remove frontend injection. Implement a lightweight Node/Express/Cloudflare Worker backend or Serverless Function (Vercel/Netlify) to proxy all Gemini requests securely. The client should never hold the key.
+### Technology Stack
 
-### 2. ARC-001: False "PWA Ready" Claims
-
-* **Description:** The project claims to be "Installable as a progressive web app for offline access" in `README.md` and `metadata.json`. This is blatantly false. There is no `manifest.json`, no pre-caching, no `serviceWorker.js` registration, and no offline fallback.
-* **Fix:** Either remove the false marketing from the documentation immediately OR implement standard PWA features (Vite PWA plugin, `manifest.json`, Apple Touch Icons, Workbox service worker).
-
----
-
-## 🔴 HIGH PRIORITY FINDINGS
-
-### 3. UX-001: Broken Mobile Responsiveness in AI Chat
-
-* **Description:** `AvatarChat.tsx` uses a hardcoded `h-[600px]` height constraint. On smaller mobile devices (e.g., iPhone SE, older Androids), this modal will overflow the viewport, making it impossible to see the input field or close the modal.
-* **Fix:** Use relative viewport units (e.g., `h-[80vh]` or `max-h-screen`) and flexbox `flex-1` correctly to ensure it stays fully within the screen boundaries.
-
-### 4. A11Y-001: Severe Accessibility Violations
-
-* **Description:** Icon-only buttons (like Social Icons, Close buttons, QR code button) have absolutely no text or `aria-label` attributes. Screen readers will read these as blank or gibberish links. Complex overlays (Modals) do not implement Focus Trapping, nor do they apply `aria-hidden` to the background, trapping visually impaired users in a navigation loop.
-* **Fix:** Add descriptive `aria-label`s to all icon buttons. Use an established accessible modal library (like Headless UI or Radix) or manually implement standard focus-trapping logic.
+* **Frontend/Dashboard:** Next.js 15 (App Router), React 18, TailwindCSS, TypeScript
+* **Embed Component:** Native Web Components (Shadow DOM isolated)
+* **Backend/API:** Next.js Route Handlers (Serverless/Edge)
+* **Database:** PostgreSQL (Neon) with Prisma ORM
+* **Authentication:** Clerk (B2B SaaS Auth)
+* **AI Engine:** Google Gemini 2.5 Pro/Flash via Edge proxy
+* **Caching/Rate Limiting:** Upstash Redis
+* **Blob Storage:** Cloudflare R2 (Avatars, Logos, vCards)
+* **Wallet Passes:** Node PassKit (Apple) / Google Wallet API
+* **Email Delivery:** Resend
 
 ---
 
-## 🟡 MEDIUM PRIORITY FINDINGS
+## 2. Engineering Epics & User Stories
 
-### 5. ARC-002: Monolithic and Bloated App.tsx
+### Epic 1: Platform Foundation & Multi-Tenant Data Model
 
-* **Description:** The `App.tsx` file is 330+ lines long and contains multiple inline components (`LeadFormModal`, `QRModal`, `SocialIcon`) and complex parent logic. This violates standard React separation of concerns.
-* **Fix:** Break down `App.tsx` into smaller chunks. Extract the `LeadFormModal`, `QRModal`, and `SocialIcon` into their own files inside the `src/components/` directory.
+_Establishing the core infrastructure, database schema, and authentication layer._
 
-### 6. PRF-001: Frontend Bundle Bloat
+* **[STORY 1.1] Database Schema Migration**
+  * **Description:** Implement Prisma schema for Users, Cards, Leads, and Events.
+  * **Tasks:**
+    * Provision Neon Serverless Postgres.
+    * Define Prisma models with relational constraints.
+    * Implement database connection pooling for serverless environments.
+* **[STORY 1.2] Authentication & Workspace Provisioning**
+  * **Description:** Integrate Clerk for passwordless login and session management.
+  * **Tasks:**
+    * Setup Clerk React provider and middleware.
+    * Create custom login/signup flows.
+    * Sync Clerk Webhooks to local database `Users` table.
+* **[STORY 1.3] User Dashboard Shell**
+  * **Description:** Build the authenticated portal where users manage their cards.
+  * **Tasks:**
+    * Implement protected App Router layout.
+    * Build sidebar navigation (Cards, Analytics, Leads, Settings).
 
-* **Description:** Including `@google/genai` inside the frontend React application significantly inflates the client bundle size, impacting Load Time (LCP) and Time to Interactive (TTI), which are critical for digital business cards.
-* **Fix:** Moving the AI execution to a Backend/Serverless Function (as required by SEC-001) will inherently resolve this by removing the bulky SDK from the client build.
+### Epic 2: Client Delivery & Embeddable Web Component
 
-### 7. ENG-001: Zero Testing Infrastructure
+_Designing the delivery mechanism allowing cards to be embedded anywhere on the web via a single line of code._
 
-* **Description:** The project has absolutely no unit tests, integration tests, or end-to-end tooling. The CI pipeline runs `typecheck` and `build`, but there is zero verification that the utilities (`generateVCard`, `getSeasonalTheme`) actually work.
-* **Fix:** Install `vitest` and `@testing-library/react`. Write core tests for the `cardUtils.ts` output logic and basic component rendering.
+* **[STORY 2.1] Universal Embed Script**
+  * **Description:** Create a lightweight Vanilla JS script that injects the card via iFrame or Web Component.
+  * **Tasks:**
+    * Bundle `embed.js` using Vite library mode (target: < 5kb).
+    * Implement Shadow DOM encapsulation to prevent CSS leakage.
+    * Handle cross-origin postMessage communication for dynamic resizing.
+* **[STORY 2.2] SSR Public Card Pages**
+  * **Description:** Generate dynamic public routes for cards (e.g., `neocard.io/c/ramon`).
+  * **Tasks:**
+    * Implement Dynamic Segments `[slug]/page.tsx`.
+    * Fetch card data server-side via Prisma.
+    * Implement `generateMetadata` for dynamic OpenGraph images and SEO tags.
+    * Implement `schema.org/Person` JSON-LD injection.
+
+### Epic 3: AI Conversational Engine (Secure Proxy)
+
+_Migrating the Gemini AI logic from the client browser to a secure, rate-limited edge environment._
+
+* **[STORY 3.1] AI Edge Proxy API**
+  * **Description:** Build the `/api/chat` route handler serving as a secure gateway to Gemini.
+  * **Tasks:**
+    * Implement Edge runtime function.
+    * Integrate Gemini SDK using secure environment variables.
+    * Construct dynamic system prompts injected with the specific card owner's data.
+* **[STORY 3.2] Session Management & Memory**
+  * **Description:** Enable multi-turn conversations while protecting against abuse.
+  * **Tasks:**
+    * Implement Redis-backed session storage (Upstash) with 30-minute TTL.
+    * Implement Token Bucket rate limiting (IP & Session ID heuristics).
+    * Add strict input sanitization and prompt-injection safeguards.
+
+### Epic 4: Lead Capture & CRM Pipeline
+
+_Converting card visitors into actionable business relationships._
+
+* **[STORY 4.1] Secure Lead Ingestion API**
+  * **Description:** Endpoint to securely receive contact form submissions from the client widget.
+  * **Tasks:**
+    * Implement `/api/leads` POST handler.
+    * Integrate Cloudflare Turnstile for silent bot protection.
+    * Write lead data to `Leads` table with associated `card_id`.
+* **[STORY 4.2] Event-Driven CRM Webhooks**
+  * **Description:** Allow card owners to forward leads to HubSpot, Zapier, or Make.com.
+  * **Tasks:**
+    * Store user-defined webhook URLs in the database.
+    * Implement asynchronous background job (Inngest/Trigger.dev) to fire HTTP POST on new lead.
+    * Implement automatic email notification via Resend with lead details.
+
+### Epic 5: Telemetry & Analytics Dashboard
+
+_Providing actionable insights on card performance without compromising visitor privacy._
+
+* **[STORY 5.1] Privacy-First Event Tracking**
+  * **Description:** Lightweight tracking system for views, scans, and clicks.
+  * **Tasks:**
+    * Implement `/api/track` beacon endpoint.
+    * Log events (view, chat, download_vcard, social_click).
+    * Implement IP hashing with daily salt for unique visitor counts (GDPR compliant).
+* **[STORY 5.2] Dashboard Visualizations**
+  * **Description:** UI components displaying time-series metrics.
+  * **Tasks:**
+    * Write optimized SQL aggregations for daily/weekly rollups.
+    * Integrate charting library (Recharts or Tremor).
+    * Display funnel conversion rates (Views -> Chats -> Leads).
+
+### Epic 6: Dynamic Theming & Asset Pipeline
+
+_Allowing fully customized brand expressions and secure file storage._
+
+* **[STORY 6.1] Cloudflare R2 Integration**
+  * **Description:** Secure infrastructure for user uploads (profile photos, brand logos).
+  * **Tasks:**
+    * Implement pre-signed URL generation for direct client-to-bucket uploads.
+    * Configure CDN caching rules for `/assets/*` path.
+* **[STORY 6.2] Theme Configuration Engine**
+  * **Description:** UI and database support for custom brand colors and seasonal overrides.
+  * **Tasks:**
+    * Expand `Theme` database model to include arbitrary HEX JSON structures.
+    * Build interactive theme builder UI in the dashboard.
+    * Implement CSS Variable generation on the server prior to client hydration.
+
+### Epic 7: Mobile Integration (Wallet & vCard)
+
+_Delivering native contact experiences across iOS and Android ecosystems._
+
+* **[STORY 7.1] Dynamic vCard Generator**
+  * **Description:** Server-side generation of VCF files ensuring cross-platform compatibility.
+  * **Tasks:**
+    * Implement `/api/vcard/[id]` endpoint.
+    * Format UTF-8 VCF strings correctly embedding base64 profile image.
+    * Set correct `Content-Disposition` attachment headers.
+* **[STORY 7.2] Apple Wallet PassKit Pipeline**
+  * **Description:** Generate `.pkpass` files allowing cards to be saved in Apple Wallet.
+  * **Tasks:**
+    * Setup Apple Developer Certificates securely in CI pipeline.
+    * Implement `passkit-generator` logic generating signed ZIP archives.
+    * Implement APNs hook for auto-updating passes when profile changes.
+
+### Epic 8: Deployment & CI/CD Infrastructure
+
+_Automating the release cycle and maintaining zero-downtime deployments._
+
+* **[STORY 8.1] Production Environment Parity**
+  * **Description:** Ensure staging and production environments are isolated but identical.
+  * **Tasks:**
+    * Map specific GitHub branches to Vercel/Cloudflare preview environments.
+    * Manage separated database connection pooling configurations.
+* **[STORY 8.2] Continuous Security Auditing**
+  * **Description:** Automated checks against dependency vulnerabilities and secrets leakage.
+  * **Tasks:**
+    * Integrate Dependabot for automated version bumps.
+    * Configure ESLint, Prettier, and Vitest pipelines as strict PR blockages.
 
 ---
 
-## 🟢 LOW PRIORITY / TECH DEBT
+## 3. Database Schema Overview (Prisma Spec)
 
-### 8. UX-002: Incomplete Features (Mock Data)
+```prisma
+model User {
+  id        String   @id @default(uuid())
+  clerkId   String   @unique
+  email     String   @unique
+  createdAt DateTime @default(now())
+  cards     Card[]
+}
 
-* **Description:** The "Book a Meeting" lead form just throws an `alert()` and "Add to Apple Wallet" throws an `alert()`. While okay for a prototype, this feels extremely unpolished for a "v1.0.0" repo.
-* **Fix:** Hook the form up to a basic free Email/API provider (Formspree or EmailJS). Add a note that Apple PKPASS generation is a premium backend feature to manage user expectations.
+model Card {
+  id            String   @id @default(uuid())
+  userId        String
+  slug          String   @unique
+  name          String
+  title         String
+  company       String?
+  bio           String?
+  avatarUrl     String?
+  themeConfig   Json?
+  metrics       Event[]
+  leads         Lead[]
+  user          User     @relation(fields: [userId], references: [id])
+}
 
-### 9. STY-001: CSS Mixed in index.html
+model Lead {
+  id          String   @id @default(uuid())
+  cardId      String
+  email       String
+  name        String?
+  message     String?
+  status      String   @default("NEW")
+  createdAt   DateTime @default(now())
+  card        Card     @relation(fields: [cardId], references: [id])
+}
 
-* **Description:** Custom scrollbar styling is dumped directly into `<style>` tags in `index.html`. This bypasses Tailwind's post-processing scope.
-* **Fix:** Move standard CSS into a `src/index.css` file and import it globally like standard Vite React apps do. Use Tailwind's `@layer utilities` for custom scrollbar hiding.
-
----
-
-## 🎯 BACKLOG TRACKER
-
-| Ticket ID | Title                                             | Severity | Status      |
-| --------- | ------------------------------------------------- | -------- | ----------- |
-| SEC-001   | Migrate Gemini API to Backend Proxy               | CRITICAL | IN PROGRESS |
-| ARC-001   | Implement True PWA (manifest + ServiceWorker)     | CRITICAL | DONE        |
-| UX-001    | Fix AI Chat Modal Overflow Constraints            | HIGH     | DONE        |
-| A11Y-001  | Implement ARIA labels & Modal Focus Traps         | HIGH     | DONE        |
-| ARC-002   | Refactor App.tsx into isolated components         | MEDIUM   | DONE        |
-| PRF-001   | Remove @google/genai from client bundle           | MEDIUM   | To-Do       |
-| ENG-001   | Scaffold Vitest & Core Unit Tests                 | MEDIUM   | To-Do       |
-| STY-001   | Migrate inline CSS to index.css                   | LOW      | DONE        |
-| UX-002    | Replace Lead Form Alert with Formspree Integration | LOW      | To-Do       |
+model Event {
+  id        String   @id @default(uuid())
+  cardId    String
+  eventType String
+  metadata  Json?
+  createdAt DateTime @default(now())
+  card      Card     @relation(fields: [cardId], references: [id])
+}
+```
